@@ -1,7 +1,7 @@
 /** @param {NS} ns */
 export async function main(ns) {
     const args = ns.flags([['server','joesguns']]);
-    const hostname = args[0];
+    const hostname = args._[0];
     while (true) {
         if (ns.getServerSecurityLevel(hostname) > ns.getServerMinSecurityLevel(hostname)) {
             await ns.weaken(hostname);
