@@ -6,13 +6,14 @@ export async function main(ns) {
     const ram = 16;
 	const target = seeker(ns);
     const exa = "exa_mk1.js";
+    let budget = ns.getServerMoneyAvailable("home")*0.5;
     let i = 0;
 
     // Continuously try to purchase servers until we've reached the maximum
     // amount of servers
     while (i < ns.getPurchasedServerLimit()) {
         
-        if (ns.getServerMoneyAvailable("home") > ns.getPurchasedServerCost(ram)) {
+        if (budget > ns.getPurchasedServerCost(ram)) {
 
             let hostname = ns.purchaseServer("pserv-" + i, ram);
             ns.scp(exa, hostname);
