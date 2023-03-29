@@ -1,5 +1,14 @@
 /** @param {NS} ns */
 export function spider(ns) {
+    // +1 to tools for each new kind of port we can open. 
+    // This is just to keep from having to write the same script 5 times.
+    let tools = 1
+    if (ns.fileExists("BruteSSH.exe", 	"home")) { tools = tools + 1; }
+	if (ns.fileExists("FTPCrack.exe", 	"home")) { tools = tools + 1; }
+	if (ns.fileExists("replaySMTP.exe",	"home")) { tools = tools + 1; }
+	if (ns.fileExists("HTTPWorm.exe",	"home")) { tools = tools + 1; }
+	if (ns.fileExists("SQLInject.exe", 	"home")) { tools = tools + 1; }
+    
     // Populate list of all servers
     let serversSeen = ['home']
     for (let i = 0; i < serversSeen.length; i++) {
@@ -39,30 +48,20 @@ export function spider(ns) {
     //Get list of hackable servers.
     let hackable = [];
     let hackLvl = ns.getHackingLevel();
-
-    let port0 = ns.read("Servers_Ports_0.txt");
-    let listPort0 = port0.split(",");
-
-    for (let i = 0; i < listPort0.length; i++) {
-        const serv = listPort0[i];
-        if (ns.getServerRequiredHackingLevel(serv) <= hackLvl) {
-            hackable.push(listPort0[i]);
-        }
-
-    }
-
-    if (ns.fileExists("bruteSSH.exe", "home")) {
-
-        let port1 = ns.read("Servers_Ports_1.txt");
-        let listPort1 = port1.split(",")
-
-        for (let i = 0; i < listPort1.length; i++) {
-            const serv = listPort1[i];
-            if (ns.getServerRequiredHackingLevel(serv) <= hackLvl) {
-                hackable.push(listPort1[i]);
-            }
-        }
-    }
+    
+    for (let i = 0; i < tools; i++) {
+		ns.print("finding servers with "+i+" ports.")
+		let port = ns.read("Servers_Ports_"+i+".txt");
+		let listPort = port.split(",")
+		for (let i = 0; i < listPort.length; i++) {
+			const serv = listPort[i];
+			if (ns.getServerRequiredHackingLevel(serv) <= hackLvl) {
+				hackable.push(listPort[i]);
+			}
+			ns.print("Looping...")
+			ns.print(hackable)
+		}
+	}
     
     let hackableList = hackable.toString();
     ns.write("hackableServers.txt", hackableList, "w");
