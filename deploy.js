@@ -15,9 +15,9 @@ export async function main(ns) {
 		let hostname = hosts[i];
 		let threadCount = Math.floor((ns.getServerMaxRam(hostname)-ns.getServerUsedRam(hostname)) / exaRAM);
 		
-		ns.killall(hostname);
-		
 		if(ns.fileExists("BruteSSH.exe","home")){ns.brutessh(hostname);}
+
+		if(ns.fileExists("FTPCrack.exe","home")){ns.ftpcrack(hostname);}
 		
 		ns.nuke(hostname);
 		
@@ -29,5 +29,5 @@ export async function main(ns) {
 
 		
 	}
-	ns.tprint("All current scripts killed, exas deployed to "+target+".");
+	ns.tprint("Exas deployed to "+hosts.length+" servers, targeting "+target);
 }
