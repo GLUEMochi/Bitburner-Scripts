@@ -1,9 +1,11 @@
+import { seeker } from "scripts/seeker.js";
 /** @param {NS} ns */
 export async function main(ns) {
     // How much RAM each purchased server will have. In this case, it'll
     // be 8GB.
     const ram = 8;
-	
+	const target = seeker(ns);
+    const exa = "exa_mk1.js";
     let i = 0;
 
     // Continuously try to purchase servers until we've reached the maximum
@@ -13,8 +15,9 @@ export async function main(ns) {
         if (ns.getServerMoneyAvailable("home") > ns.getPurchasedServerCost(ram)) {
 
             let hostname = ns.purchaseServer("pserv-" + i, ram);
-            ns.scp("exa_mk1.js", hostname);
-            ns.exec("exa_mk1.js", hostname, 3, "joesguns");
+            ns.scp(exa, hostname);
+            ns.exec(exa, hostname, 3, target);
+            ns.write("purchasedServers.txt",ns.getPurchasedServers().toString);
             ++i;
         }
         //Make the script wait for a second before looping again.
